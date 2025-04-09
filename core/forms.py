@@ -24,4 +24,4 @@ class LoginForm(Form):
 class TransactionForm(ModelForm):
     class Meta:
         model = Transaction
-        fields = ['transaction_type', 'amount', 'category_id', 'description']
+        fields = ['transaction_type', 'amount', 'category_id', 'description', 'user_id']

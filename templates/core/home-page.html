@@ -126,6 +126,10 @@
         .transaction.expenses .amount {
             color: #c62828;
         }
+        .transaction.income .expense {
+            color: red;
+            border-color:red;
+        }
 
         .hidden {
             display: none;
@@ -141,7 +145,7 @@
 
     <div class="balance">
         Account Balance<br>
-        $100
+        {{ total }}$
     </div>
     <h3>{{ request.user }}</h3>
 
@@ -151,7 +155,7 @@
                 <div><img width="20" height="20"
                           src="https://img.icons8.com/external-nawicon-flat-nawicon/64/external-Income-money-management-nawicon-flat-nawicon.png"
                           alt="external-Income-money-management-nawicon-flat-nawicon"/></div>
-                Income $100
+                Income {{ income }}$
             </button>
         </a>
         <a href="{% url 'expense' %}">
@@ -159,20 +163,30 @@
                 <div><img width="20" height="20"
                           src="https://img.icons8.com/external-flaticons-flat-flat-icons/64/external-expenses-accounting-flaticons-flat-flat-icons-7.png"
                           alt="external-expenses-accounting-flaticons-flat-flat-icons-7"/></div>
-                Expenses $0
+                Expenses {{ expense }}$
             </button>
         </a>
     </div>
     <div class="transactions">
-        <div class="transaction income">
+        {% for transaction in transactions %}
+        <div class="transaction {% if  transaction.transaction_type == 'expense' %} expenses {% else %} income {% endif %}">
                     <i class="fas fa-business-time icon"></i>
                     <div class="details">
-                        <div class="category">Biznes</div>
-                        <div class="time">2025-03-03 12:00</div>
+                        <div class="category">{{ transaction.category_id.name }}</div>
+                        <div class="time">{{ transaction.created_at }}</div>
                     </div>
-                    <div class="amount">+$100</div>
+            {% if  transaction.transaction_type == 'expense' %}
+                    <div class="amount">-${{ transaction.amount }}</div>
+            	{% else %}
+                    <div class="amount ">+${{ transaction.amount }}</div>
+
+            {% endif %}
                 </div>
+
+        {% endfor %}
+
     </div>
+
 </div>
 
 

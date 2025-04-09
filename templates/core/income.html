@@ -165,19 +165,23 @@ label {
       </div>
 
     <!-- Form -->
-    <form action="#" method="post">
+    <form action="{% url 'income' %}" method="post">
         {% csrf_token %}
       <div class="form-group">
         <label id="description">How much?</label>
-        <input class="green-input" type="text" id="amount" value="$ " required name="amount">
+        <input  type="number"  required name="amount">
       </div>
+        <input type="hidden" name="transaction_type" value="income">
+        <input type="hidden" name="user_id" value="{{ request.user.id }}">
 
       <div class="form-group" >
         <label>Category</label>
         <select id="category" required name="category_id">
-                <option value="">Select category</option>
-                <option value="">Biznes</option>
-                <option value="">Salary</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+
+            {% endfor %}
+
 
 
         </select>
