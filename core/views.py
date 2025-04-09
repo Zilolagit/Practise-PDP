@@ -1,19 +1,18 @@
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.hashers import check_password
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import TemplateView, CreateView, FormView, UpdateView
-
-from core.forms import RegisterModelForm, LoginForm
-
+from core.forms import RegisterModelForm, LoginForm, TransactionForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from core.models import Transaction
 
 # Create your views here.
 
-class HomeView(TemplateView, LoginRequiredMixin):
+class HomeView(LoginRequiredMixin, TemplateView):
     login_url = 'login'
     template_name = 'core/home-page.html'
 
@@ -55,18 +54,17 @@ class LogoutView(View):
         return redirect('login')
 
 
-from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Transaction
-from .forms import TransactionForm
+
 
 class ExpenseTransactionCreateView(LoginRequiredMixin, CreateView):
+    login_url = 'login'
     model = Transaction
     form_class = TransactionForm
     template_name = 'core/expense.html'
     success_url = reverse_lazy('home')
 
 class IncomeTransactionCreateView(LoginRequiredMixin, CreateView):
+    login_url = 'login'
     model = Transaction
     form_class = TransactionForm
     template_name = 'core/income.html'
